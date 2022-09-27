@@ -2,7 +2,6 @@ package it.eforhum.corsojava.ArchiveDocument;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 
 import it.eforhum.corsojava.ArchiveDocument.model.ArchiveDocument;
@@ -49,13 +48,20 @@ public class Main {
 					menu.printDocumentsInTable(list, System.out);
 					break;
 				case 3:
-					System.out.print("Inserisci l'identificativo da cercare: ");
-					int id = 0;
-					ArchiveDocument document = menu.searchDocumentByID(id);
-					if(document == null) {
-						System.out.println("Documento non trovato");
-					} else {
-						menu.printDocumentsInTable((ArrayList<ArchiveDocument>) Arrays.asList(document), System.out);
+					try {
+						System.out.print("Inserisci l'ID del documento da cercare: ");
+						String idStr = scanner.nextLine();
+						int ID = Integer.parseInt(idStr);
+						ArchiveDocument document = menu.searchDocumentByID(ID);
+						if(document == null) {
+							System.out.println("\nDocumento non trovato");
+						} else {
+							ArrayList<ArchiveDocument> docs = new ArrayList<>();
+							docs.add(document);
+							menu.printDocumentsInTable(docs, System.out);
+						}
+					} catch (NumberFormatException e) {
+						System.out.println("Nessun documento trovato");
 					}
 					break;
 				case 4:
@@ -65,9 +71,9 @@ public class Main {
 					// TODO modifica documento presente
 					break;
 				case 6:
-					System.out.print("Inserisci l'ID del documento da eliminare: ");
-					String idStr = scanner.nextLine();
 					try {
+						System.out.print("Inserisci l'ID del documento da eliminare: ");
+						String idStr = scanner.nextLine();
 						int ID = Integer.parseInt(idStr);
 						menu.deleteDocumentByID(ID);
 					} catch(NumberFormatException e) {

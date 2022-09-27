@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
-Built-By: fascio
-Build-Jdk: 11.0.16
+Built-By: bogda
+Build-Jdk: 11.0.16.1
 Class-Path: maven-shared-utils-3.3.4.jar commons-io-2.6.jar
 Main-Class: it.eforhum.corsojava.varop.MainEmpty
 Created-By: Maven Integration for Eclipse

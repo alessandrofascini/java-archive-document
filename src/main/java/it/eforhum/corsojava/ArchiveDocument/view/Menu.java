@@ -1,41 +1,65 @@
 package it.eforhum.corsojava.ArchiveDocument.view;
 
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Random;
+
+import it.eforhum.corsojava.ArchiveDocument.model.Archive;
+import it.eforhum.corsojava.ArchiveDocument.model.ArchiveDocument;
+
 public class Menu {
-
-	public void displayMenu() {
-		boolean repeat = true;
-
-		do {
-			System.out.println("0. Esci");
-			System.out.println("1. inserimento manuale dei dati");
-			System.out.println("2. caricamento attraverso generazione causale di informazioni");
-			System.out.println("3. ricerca e stampa di un documento attraverso l'identificativo");
-			System.out.println("4. stampa paginata della lista documenti così rappresentata");
-			System.out.println("5. modifica documento presente (cod e descrizione)");
-			System.out.println("6. rimozione di un documento presente");
-			System.out.println("7. stampa di tutti i documenti che contengono nella descrizione una query di ricerca");
-			int choice = 0;
-			switch (choice) {
-				case 0:
-					repeat = false;
-					break;
-				case 1:
-					break;
-				case 2:
-					break;
-				case 3:
-					break;
-				case 4:
-					break;
-				case 5:
-					break;
-				case 6:
-					break;
-				case 7:
-					break;
-				default: 
-					System.out.println("Scelta non valida");
-			}
-		} while (repeat);
+	private Archive archive = new Archive();
+	
+	public ArchiveDocument createNewDocument(String cod, String description) {
+		ArchiveDocument doc = new ArchiveDocument(cod, description);
+		this.archive.addDocument(doc);
+		return doc;
+	}
+	
+	public ArchiveDocument createNewRandomDocument() {
+		Random rand = new Random();
+		int randInt = rand.nextInt(16777215); // FFFFFF in esadecimale
+		String hexString = Integer.toHexString(randInt);
+		String cod = (rand.nextBoolean() ? hexString.toLowerCase() : hexString.toUpperCase());
+		String description = "The quick brown fox jumps over the lazy dog";
+		return this.createNewDocument(cod, description);
+	}
+	
+	public String getTableHeader() {
+		return new StringBuilder()
+		.append("------|")
+		.append("------|")
+		.append("------------------------------\n")
+		.append("ID    |")
+		.append("COD   |")
+		.append("DESC \n")
+		.append("------|")
+		.append("------|")
+		.append("------------------------------")
+		.toString();
+	}
+	
+	public String printDocument(ArchiveDocument doc) {
+		return String.format("%6d|%s|%s", doc.getId(), doc.getCod(), doc.getDesc());
+	}
+	
+	public void printDocumentsInTable(ArrayList<ArchiveDocument> docs, PrintStream stream) {
+		stream.println(this.getTableHeader());
+		for(ArchiveDocument doc : docs) {
+			stream.println(this.printDocument(doc));
+		}
+		stream.println();
+	}
+	
+	public ArchiveDocument searchDocumentByID(int id) {
+		return this.archive.searchByID(id);
+	}
+	
+	public ArrayList<ArchiveDocument> filterDocumentsByDescriptionQuery(String query) {
+		return this.archive.searchByPartOfDescription(query);
+	}
+	
+	public void deleteDocumentByID(int ID) {
+		this.archive.deleteDocumentByID(ID);
 	}
 }

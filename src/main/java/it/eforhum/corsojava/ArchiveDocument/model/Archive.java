@@ -1,5 +1,7 @@
 package it.eforhum.corsojava.ArchiveDocument.model;
 
+import java.util.ArrayList;
+
 public class Archive {
 	private ArchiveDAO dao = new ArchiveDAO();
 	
@@ -17,5 +19,9 @@ public class Archive {
 	
 	public void deleteDocumentByID(int ID) {
 		this.dao.deleteDocumentByID(ID);
+	}
+	
+	public ArrayList<ArchiveDocument> searchByPartOfDescription(String query) {
+		return this.dao.searchByPartOfDescription(query);
 	}
 }

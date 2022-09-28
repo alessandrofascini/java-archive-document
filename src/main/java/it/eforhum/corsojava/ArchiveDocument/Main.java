@@ -4,11 +4,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import it.eforhum.corsojava.ArchiveDocument.model.ArchiveDocument;
 import it.eforhum.corsojava.ArchiveDocument.view.Menu;
 
 public class Main {
+	
+	private static final Logger LOG = LogManager.getLogger(Main.class);
+	
 	public static void main(String[] args) {
+		LOG.info("Start of");
 		try (Scanner scanner = new Scanner(System.in)) {
 			boolean repeat = true;
 			Menu menu = new Menu();

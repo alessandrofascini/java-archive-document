@@ -1,5 +1,6 @@
 package it.eforhum.corsojava.ArchiveDocument.model;
 
+import java.util.Objects;
 import java.util.Random;
 import org.apache.maven.shared.utils.StringUtils;
 
@@ -46,11 +47,34 @@ public class ArchiveDocument {
 
 	
 	private void setId() {
+//		TODO fix -> autoassign number ID | NOT RANDOM  
 		Random rand = new Random();
 		int maxNumber = (int) Math.pow(10, ID_DIGITS) - 1;
 		this.id = rand.nextInt(maxNumber);
 	}
 	
+	@Override
+	public int hashCode() {
+		return Objects.hash(cod, desc, id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ArchiveDocument other = (ArchiveDocument) obj;
+		return Objects.equals(cod, other.cod) && Objects.equals(desc, other.desc) && id == other.id;
+	}
+
+	@Override
+	public String toString() {
+		return "ArchiveDocument [id=" + id + ", cod=" + cod + ", desc=" + desc + "]";
+	}
+
 	public int getId() {
 		return id;
 	}	

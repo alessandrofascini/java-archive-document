@@ -76,9 +76,19 @@ public class Main {
 					}
 					break;
 				case 4:
-					Pagination myPage = new Pagination();
-					System.out.println("this page -> ");
-					menu.printSectionOfDocx(menu.docxOrdination(myPage), myPage, System.out);
+					try {
+						Pagination pagination = new Pagination();
+						do {
+							menu.printPaginatedList(pagination, System.out);
+							int nextpage = pagination.getCurrentPage()+1;
+							System.out.println("Mostra pagina " + nextpage + "? (Y - yes / N - no) ");
+							boolean yes = scanner.nextLine().equals("Y");
+							if(!yes) {
+								break;
+							}
+							pagination.setCurrentPage(nextpage);
+						} while(true);
+					} catch (Exception e) { }
 					break;
 				case 5:
 					try {

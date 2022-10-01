@@ -39,7 +39,7 @@ public class Menu {
 		return String.format("%6d|%s|%s", doc.getId(), doc.getCod(), doc.getDesc());
 	}
 
-	public void printDocumentsInTable(ArrayList<ArchiveDocument> docs, PrintStream stream) {
+	public void printDocumentsInTable(List<ArchiveDocument> docs, PrintStream stream) {
 		stream.println(this.getTableHeader());
 		for (ArchiveDocument doc : docs) {
 			stream.println(this.printDocument(doc));
@@ -63,23 +63,49 @@ public class Menu {
 		this.archive.changeDocumentByID(ID, cod, desc);
 	}
 
-	public List<ArchiveDocument> printSectionOfDocx(List<ArchiveDocument> sublist,Pagination page, PrintStream stream) {
-		Pagination newPage = new Pagination();
-		sublist = docxOrdination(page);
-		return this.archive.sectionOfDocumets(docxOrdination(page), 0, 4);
+
+	public void printPaginatedList(Pagination page, PrintStream stream) {
+//		1) ordinarare la lista
+		List<ArchiveDocument> orderedList = this.docxOrdination(page);
+		
+//		2) 'sezionare' la lista ordinata
+		List<ArchiveDocument> paginatedList = this.sectionOfPaginatedList(orderedList, page);
+		
+//		3) print tabella
+		// intestazione paginata
+		double result = orderedList.size() / page.getNumDocxForPage();
+		int r = (int)(orderedList.size() % page.getNumDocxForPage() == 0 ? 0 : 1);
+		int maxNumberOfPages = (int) result + r;
+		stream.println("Pagina " + page.getCurrentPage() + " di " + maxNumberOfPages);
+		this.printDocumentsInTable(paginatedList, stream);
+	}
+	
+	private List<ArchiveDocument> sectionOfPaginatedList(List<ArchiveDocument> list, Pagination page) {
+		int currentPage = page.getCurrentPage()-1;
+		int documentForPage = page.getNumDocxForPage();
+		int startIndex = currentPage * documentForPage;
+		if(startIndex < 0 || startIndex >= list.size()) { // non va bene
+			throw new ArrayIndexOutOfBoundsException("");
+		}
+		int endIndex = startIndex + documentForPage;
+		if(endIndex >= list.size()) {
+			endIndex = list.size();
+		}
+		return list.subList(startIndex, endIndex);
 	}
 
-	public List<ArchiveDocument> docxOrdination(Pagination page) {
+	private List<ArchiveDocument> docxOrdination(Pagination page) {
+		List<ArchiveDocument> unorderedList = this.archive.getDocuments();
 
-		List<ArchiveDocument> orderedDocx = archive.getDocuments();
-		Collections.sort(orderedDocx, new Comparator<ArchiveDocument>() {
+		List<ArchiveDocument> orderedList = new ArrayList<>(unorderedList);
+
+		Collections.sort(orderedList, new Comparator<ArchiveDocument>() {
 			public int compare(ArchiveDocument doc1, ArchiveDocument doc2) {
 				int result = 0;
 				switch (page.getOrderedByField()) {
 				case Util.FIELD_ID:
 					result = Integer.compare(doc1.getId(), doc2.getId());
 					break;
-
 				case Util.FIELD_COD:
 					result = doc1.getCod().compareTo(doc2.getCod());
 					break;
@@ -91,7 +117,7 @@ public class Menu {
 			}
 		});
 
-		return orderedDocx;
+		return orderedList;
 	}
 
 }

@@ -5,7 +5,7 @@ import org.apache.maven.shared.utils.StringUtils;
 
 public class ArchiveDocument {
 	private final static int ID_DIGITS = 6; // max ID lenght
-	private static int ID_COUNT = 0;
+	private static int ID_COUNT = 1;
 	private final static int MAX_DESCRIPTION_LENGTH = 30; // max description lenght
 	private int id; // file id variable
 	private String cod; // file cod variable

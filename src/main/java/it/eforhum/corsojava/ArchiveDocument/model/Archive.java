@@ -7,7 +7,7 @@ public class Archive {
 	private ArchiveDAO dao = new ArchiveDAO();
 
 	public List<ArchiveDocument> getDocuments() {
-		return dao.getDocuments();
+		return this.dao.getDocuments();
 	}
 
 	public void addDocument(ArchiveDocument newDocument) {
@@ -28,9 +28,5 @@ public class Archive {
 
 	public ArrayList<ArchiveDocument> searchByPartOfDescription(String query) {
 		return this.dao.searchByPartOfDescription(query);
-	}
-
-	public List<ArchiveDocument> sectionOfDocumets(List<ArchiveDocument> mySubList, int startIndex, int endIndex) {
-		return mySubList.subList(startIndex, endIndex);
 	}
 }

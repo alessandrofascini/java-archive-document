@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ArchiveDAO {
-	private ArrayList<ArchiveDocument> documents = new ArrayList<>();
+	private List<ArchiveDocument> documents = new ArrayList<>();
 
 	public List<ArchiveDocument> getDocuments() {
 		return Collections.unmodifiableList(this.documents);

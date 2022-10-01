@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
-Built-By: bogda
-Build-Jdk: 11.0.16.1
+Built-By: fascio
+Build-Jdk: 11.0.16
 Class-Path: maven-shared-utils-3.3.4.jar commons-io-2.6.jar log4j-core-2
  .19.0.jar log4j-api-2.19.0.jar
 Main-Class: it.eforhum.corsojava.varop.MainEmpty

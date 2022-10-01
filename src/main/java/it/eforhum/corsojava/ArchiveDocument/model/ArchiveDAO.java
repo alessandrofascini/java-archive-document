@@ -1,9 +1,15 @@
 package it.eforhum.corsojava.ArchiveDocument.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class ArchiveDAO {
 	private ArrayList<ArchiveDocument> documents = new ArrayList<>();
+
+	public List<ArchiveDocument> getDocuments() {
+		return Collections.unmodifiableList(this.documents);
+	}
 
 	public void addDocument(ArchiveDocument newDocument) {
 		this.documents.add(newDocument);
@@ -38,11 +44,12 @@ public class ArchiveDAO {
 
 	public ArrayList<ArchiveDocument> searchByPartOfDescription(String query) {
 		ArrayList<ArchiveDocument> subdocuments = new ArrayList<ArchiveDocument>();
-		for(ArchiveDocument document : this.documents) {
-			if(document.getDesc().contains(query)) {
+		for (ArchiveDocument document : this.documents) {
+			if (document.getDesc().contains(query)) {
 				subdocuments.add(document);
 			}
 		}
 		return subdocuments;
 	}
+
 }

@@ -1,15 +1,15 @@
 package it.eforhum.corsojava.ArchiveDocument.model;
 
 import java.util.Objects;
-import java.util.Random;
 import org.apache.maven.shared.utils.StringUtils;
 
 public class ArchiveDocument {
-	private final static int ID_DIGITS = 6;					// max ID lenght
-	private final static int MAX_DESCRIPTION_LENGTH = 30;	// max description lenght
-	private int id;											// file id	variable
-	private String cod;										// file cod variable
-	private String desc;									// file description variable
+	private final static int ID_DIGITS = 6; // max ID lenght
+	private static int ID_COUNT = 0;
+	private final static int MAX_DESCRIPTION_LENGTH = 30; // max description lenght
+	private int id; // file id variable
+	private String cod; // file cod variable
+	private String desc; // file description variable
 
 	public ArchiveDocument(String cod, String description) {
 		this.setId();
@@ -22,7 +22,7 @@ public class ArchiveDocument {
 	}
 
 	public void setCod(String cod) {
-		if(cod.length() > 6) {
+		if (cod.length() > 6) {
 			cod = cod.substring(0, 6);
 		} else {
 			cod = StringUtils.leftPad(cod, 6, "0");
@@ -35,24 +35,27 @@ public class ArchiveDocument {
 	}
 
 	public void setDesc(String description) {
-		if(description == null) {
-			description = "";
+		String result = "";
+		if (description == null) {
+			description = result;
 		}
 		description = description.trim();
-		if(description.length() > MAX_DESCRIPTION_LENGTH) {
-			description = description.substring(0, MAX_DESCRIPTION_LENGTH-3).concat("...");
+		if (description.length() > MAX_DESCRIPTION_LENGTH) {
+			description = description.substring(0, MAX_DESCRIPTION_LENGTH - 3).concat("...");
 		}
 		this.desc = description;
 	}
 
-	
 	private void setId() {
-//		TODO fix -> autoassign number ID | NOT RANDOM  
-		Random rand = new Random();
-		int maxNumber = (int) Math.pow(10, ID_DIGITS) - 1;
-		this.id = rand.nextInt(maxNumber);
+//		TODO fix -> autoassign number ID | NOT RANDOM
+
+		if (ID_COUNT < Math.pow(10, ID_DIGITS)) {
+			this.id = ID_COUNT++;
+		} else {
+			throw new ArithmeticException();
+		}
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(cod, desc, id);
@@ -77,5 +80,5 @@ public class ArchiveDocument {
 
 	public int getId() {
 		return id;
-	}	
+	}
 }

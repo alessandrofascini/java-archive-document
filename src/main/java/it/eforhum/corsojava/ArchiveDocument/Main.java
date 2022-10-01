@@ -1,7 +1,9 @@
 package it.eforhum.corsojava.ArchiveDocument;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 import org.apache.logging.log4j.LogManager;
@@ -9,11 +11,12 @@ import org.apache.logging.log4j.Logger;
 
 import it.eforhum.corsojava.ArchiveDocument.model.ArchiveDocument;
 import it.eforhum.corsojava.ArchiveDocument.view.Menu;
+import it.eforhum.corsojava.ArchiveDocument.view.Pagination;
 
 public class Main {
-	
+
 	private static final Logger LOG = LogManager.getLogger(Main.class);
-	
+
 	public static void main(String[] args) {
 		LOG.info("Start of");
 		try (Scanner scanner = new Scanner(System.in)) {
@@ -32,6 +35,7 @@ public class Main {
 				System.out.println(
 						"7. Stampa di tutti i documenti che contengono nella descrizione una query di ricerca");
 				System.out.print("?. ");
+				System.out.println("\n--------------------------------------------------------\n");
 				int choice = -1;
 				try {
 					choice = Integer.parseInt(scanner.nextLine());
@@ -60,7 +64,7 @@ public class Main {
 						String idStr = scanner.nextLine();
 						int ID = Integer.parseInt(idStr);
 						ArchiveDocument document = menu.searchDocumentByID(ID);
-						if(document == null) {
+						if (document == null) {
 							System.out.println("\nDocumento non trovato");
 						} else {
 							ArrayList<ArchiveDocument> docs = new ArrayList<>();
@@ -72,18 +76,36 @@ public class Main {
 					}
 					break;
 				case 4:
-					// TODO stampa paginata
+					Pagination myPage = new Pagination();
+					System.out.println("this page -> ");
+					menu.printSectionOfDocx(menu.docxOrdination(myPage), myPage, System.out);
 					break;
 				case 5:
-					// TODO modifica documento presente
+					try {
+						System.out.print("Inserisci l'ID del documento da modificare: ");
+						String idStr = scanner.nextLine();
+						int ID = Integer.parseInt(idStr);
+
+						System.out.print("Inserisci il nuovo codice: ");
+						String codStr = scanner.nextLine();
+
+						System.out.print("Inserisci la nuova descrizione: ");
+						String newDesc = scanner.nextLine();
+
+						menu.changeDocumentByID(ID, codStr, newDesc);
+						System.out.println("Modifica eseguita con secesso");
+					} catch (NumberFormatException e) {
+						System.out.println("ID inserito non valido");
+					}
 					break;
 				case 6:
 					try {
 						System.out.print("Inserisci l'ID del documento da eliminare: ");
 						String idStr = scanner.nextLine();
 						int ID = Integer.parseInt(idStr);
+
 						menu.deleteDocumentByID(ID);
-					} catch(NumberFormatException e) {
+					} catch (NumberFormatException e) {
 						System.out.println("ID inserito non valido");
 					}
 					break;
@@ -91,7 +113,7 @@ public class Main {
 					System.out.print("Inserisci una parte della descrizione da cercare: ");
 					String query = scanner.nextLine();
 					ArrayList<ArchiveDocument> docs = menu.filterDocumentsByDescriptionQuery(query);
-					if(docs.isEmpty()) {
+					if (docs.isEmpty()) {
 						System.out.println("Nessun documento trovato");
 					} else {
 						menu.printDocumentsInTable(docs, System.out);
